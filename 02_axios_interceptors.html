@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.27.2/axios.min.js" integrity="sha512-odNmoc1XJy5x1TMVMdC7EMs3IVdItLPlCeL5vSUPN2llYKMJ2eByTTAIiiuqLg+GdNr9hF6z81p27DArRFKT7A==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <title>Axios Interceptors</title>
+</head>
+<body>
+    <button id="get">GET Request</button>
+    <script>
+        const getReq = document.querySelector('#get')
+        axios.interceptors.request.use(
+            config => { 
+                console.log('axios-request-interceptor-success')
+                // return config
+                throw 'testing'
+            },
+            error => {
+                console.log('axios-request-interceptor-fail')
+                return Promise.reject(error)
+            }
+        )
+
+        axios.interceptors.response.use(
+            response => { 
+                console.log('axios-response-interceptor-success')
+                return response
+            },
+            error => {
+                console.log('axios-response-interceptor-fail')
+                return Promise.resolve('testing')
+            }
+        )
+        
+        getReq.onclick = () => {
+            axios({
+                url: 'http://localhost:3000/posts',
+                method: 'get',
+            })
+            .then((value) => {
+                console.log('axios-result-success')
+            })
+            .catch((reason) => {
+                console.log('axios-result-fail')
+            })
+        }
+
+    </script>
+</body>
+</html>
